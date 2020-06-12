@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mango.RabbitMQ.Util\Mango.RabbitMQ.Util.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RabbitMQ.Client">
+      <HintPath>..\..\..\..\github\06-RabbitMQDemo\ReferenceDll\RabbitMQ.Client.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
