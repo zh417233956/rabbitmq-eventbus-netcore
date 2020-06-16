@@ -1,7 +1,6 @@
 ﻿using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mango.RabbitMQ.Util
 {
@@ -18,9 +17,7 @@ namespace Mango.RabbitMQ.Util
 
         public RabbitMqConnections()
         {
-            //TODO:待完善
-            //Default = new ConnectionFactory();
-            Default = new ConnectionFactory() { HostName = "192.168.6.88", Port = 5672, UserName = "test", Password = "123456" };
+            Default = new ConnectionFactory();
         }
 
         public ConnectionFactory GetOrDefault(string connectionName)

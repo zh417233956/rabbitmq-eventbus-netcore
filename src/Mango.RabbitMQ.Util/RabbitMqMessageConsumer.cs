@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace Mango.RabbitMQ.Util
 {
@@ -34,7 +31,7 @@ namespace Mango.RabbitMQ.Util
             IConnectionPool connectionPool)
         {
             ConnectionPool = connectionPool;
-           
+
             QueueBindCommands = new ConcurrentQueue<QueueBindCommand>();
             Callbacks = new ConcurrentBag<Func<IModel, BasicDeliverEventArgs, Task>>();
 

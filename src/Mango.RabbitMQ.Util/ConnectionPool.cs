@@ -1,8 +1,6 @@
-﻿using RabbitMQ.Client;
-using System;
+﻿using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mango.RabbitMQ.Util
 {
@@ -14,10 +12,9 @@ namespace Mango.RabbitMQ.Util
 
         private bool _isDisposed;
 
-        //public ConnectionPool(IOptions<RabbitMqOptions> options)
-        public ConnectionPool(RabbitMqOptions options)
+        public ConnectionPool(IOptions<RabbitMqOptions> options)
         {
-            Options = options;
+            Options = options.Value;
             Connections = new ConcurrentDictionary<string, IConnection>();
         }
 

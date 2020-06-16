@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mango.RabbitMQ.Util
+﻿namespace Mango.RabbitMQ.Util
 {
     public class RabbitMqOptions
     {

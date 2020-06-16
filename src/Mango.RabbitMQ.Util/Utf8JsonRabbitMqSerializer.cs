@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Mango.RabbitMQ.Util
@@ -14,7 +13,7 @@ namespace Mango.RabbitMQ.Util
 
         public object Deserialize(byte[] value, Type type)
         {
-            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(value),type);
+            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(value), type);
         }
     }
 }
