@@ -5,11 +5,11 @@ namespace Mango.RabbitMQ.Core
 {
     public class RabbitMqMessageConsumerFactory : IRabbitMqMessageConsumerFactory, IDisposable
     {
-        protected IServiceScope ServiceScope { get; }
+        protected RabbitMqMessageConsumer Consumer;
 
-        public RabbitMqMessageConsumerFactory(IServiceScopeFactory serviceScopeFactory)
+        public RabbitMqMessageConsumerFactory(RabbitMqMessageConsumer consumer)
         {
-            ServiceScope = serviceScopeFactory.CreateScope();
+            Consumer = consumer;
         }
 
         public IRabbitMqMessageConsumer Create(
@@ -17,14 +17,13 @@ namespace Mango.RabbitMQ.Core
             QueueDeclareConfiguration queue,
             string connectionName = null)
         {
-            var consumer = ServiceScope.ServiceProvider.GetRequiredService<RabbitMqMessageConsumer>();
-            consumer.Initialize(exchange, queue, connectionName);
-            return consumer;
+            Consumer.Initialize(exchange, queue, connectionName);
+            return Consumer;
         }
 
         public void Dispose()
         {
-            ServiceScope?.Dispose();
+            Consumer?.Dispose();
         }
     }
 }

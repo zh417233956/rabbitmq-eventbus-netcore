@@ -27,6 +27,7 @@ namespace Web.Publish.App
             services.AddControllers();
 
             services.Configure<RabbitMqOptions>(Configuration.GetSection("RabbitMQ"));
+            services.Configure<RabbitMqEventBusOptions>(Configuration.GetSection("RabbitMQ:EventBus"));
 
             services.AddRabbitMQPublishMiddleware();
         }

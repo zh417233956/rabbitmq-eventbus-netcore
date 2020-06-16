@@ -45,6 +45,8 @@ namespace Mango.RabbitMQ.Core
             QueueDeclareConfiguration queue,
             string connectionName = null)
         {
+            Exchange = exchange;
+            Queue = queue;
             ConnectionName = connectionName;
             Timer.Start();
         }
@@ -152,17 +154,17 @@ namespace Mango.RabbitMQ.Core
                     arguments: Queue.Arguments
                 );
 
-                var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += async (model, basicDeliverEventArgs) =>
-                {
-                    await HandleIncomingMessage(channel, basicDeliverEventArgs);
-                };
+                //var consumer = new EventingBasicConsumer(channel);
+                //consumer.Received += async (model, basicDeliverEventArgs) =>
+                //{
+                //    await HandleIncomingMessage(channel, basicDeliverEventArgs);
+                //};
 
-                channel.BasicConsume(
-                    queue: Queue.QueueName,
-                    autoAck: false,
-                    consumer: consumer
-                );
+                //channel.BasicConsume(
+                //    queue: Queue.QueueName,
+                //    autoAck: false,
+                //    consumer: consumer
+                //);
 
                 Channel = channel;
             }

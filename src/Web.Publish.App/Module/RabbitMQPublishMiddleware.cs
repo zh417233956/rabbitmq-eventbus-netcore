@@ -60,10 +60,12 @@ namespace Web.Publish.App.Module
             services.AddSingleton<IChannelPool, ChannelPool>();
             services.AddSingleton<IConnectionPool, ConnectionPool>();
             services.AddSingleton<IRabbitMqMessageConsumerFactory, RabbitMqMessageConsumerFactory>();
-            services.AddTransient<IRabbitMqMessageConsumer, RabbitMqMessageConsumer>();
+            services.AddTransient<RabbitMqMessageConsumer>();
             services.AddTransient<IRabbitMqSerializer, Utf8JsonRabbitMqSerializer>();
             //中间件注入
             services.AddSingleton<RabbitMQPublishMiddleware>();
+            //事件
+            services.AddSingleton<RabbitMqEventBus>();
         }
         public static IApplicationBuilder UseRabbitMQPublishMiddleware(this IApplicationBuilder builder)
         {
