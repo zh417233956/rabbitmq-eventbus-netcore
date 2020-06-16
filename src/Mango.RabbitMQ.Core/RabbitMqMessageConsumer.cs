@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Concurrent;
@@ -8,10 +9,10 @@ namespace Mango.RabbitMQ.Core
 {
     public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, IDisposable
     {
+        public ILogger<RabbitMqMessageConsumer> Logger { get; set; }
         protected MgoTimer Timer { get; }
 
         protected IConnectionPool ConnectionPool { get; }
-
 
         protected ExchangeDeclareConfiguration Exchange { get; private set; }
 
@@ -27,14 +28,13 @@ namespace Mango.RabbitMQ.Core
 
         protected object ChannelSendSyncLock { get; } = new object();
 
-        public RabbitMqMessageConsumer(
-            IConnectionPool connectionPool)
+        public RabbitMqMessageConsumer(IConnectionPool connectionPool, ILogger<RabbitMqMessageConsumer> logger)
         {
+            Logger = logger;
             ConnectionPool = connectionPool;
-
             QueueBindCommands = new ConcurrentQueue<QueueBindCommand>();
             Callbacks = new ConcurrentBag<Func<IModel, BasicDeliverEventArgs, Task>>();
-
+            Timer = new MgoTimer();
             Timer.Period = 5000; //5 sec.
             Timer.Elapsed += Timer_Elapsed;
             Timer.RunOnStart = true;
@@ -102,8 +102,7 @@ namespace Mango.RabbitMQ.Core
             }
             catch (Exception ex)
             {
-                //Logger.LogException(ex, LogLevel.Warning);
-                //AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
+                Logger.LogWarning(ex.Message);
             }
         }
 
@@ -169,8 +168,7 @@ namespace Mango.RabbitMQ.Core
             }
             catch (Exception ex)
             {
-                //Logger.LogException(ex, LogLevel.Warning);
-                //AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
+                Logger.LogWarning(ex.Message);
             }
         }
 
@@ -187,8 +185,7 @@ namespace Mango.RabbitMQ.Core
             }
             catch (Exception ex)
             {
-                //Logger.LogException(ex);
-                //await ExceptionNotifier.NotifyAsync(ex);
+                Logger.LogWarning(ex.Message);
             }
         }
 
@@ -205,8 +202,7 @@ namespace Mango.RabbitMQ.Core
             }
             catch (Exception ex)
             {
-                //Logger.LogException(ex, LogLevel.Warning);
-                //AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
+                Logger.LogWarning(ex.Message);
             }
         }
 

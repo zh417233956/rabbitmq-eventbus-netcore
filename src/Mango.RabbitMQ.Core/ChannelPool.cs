@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -17,13 +18,13 @@ namespace Mango.RabbitMQ.Core
 
         protected TimeSpan TotalDisposeWaitDuration { get; set; } = TimeSpan.FromSeconds(10);
 
-        //public ILogger<ChannelPool> Logger { get; set; }
+        public ILogger<ChannelPool> Logger { get; set; }
 
-        public ChannelPool(IConnectionPool connectionPool)
+        public ChannelPool(IConnectionPool connectionPool, ILogger<ChannelPool> logger)
         {
             ConnectionPool = connectionPool;
             Channels = new ConcurrentDictionary<string, ChannelPoolItem>();
-            //Logger = NullLogger<ChannelPool>.Instance;
+            Logger = logger;
         }
 
         public virtual IChannelAccessor Acquire(string channelName = null, string connectionName = null)
@@ -72,13 +73,13 @@ namespace Mango.RabbitMQ.Core
 
             if (!Channels.Any())
             {
-                //Logger.LogDebug($"Disposed channel pool with no channels in the pool.");
+                Logger.LogDebug($"Disposed channel pool with no channels in the pool.");
                 return;
             }
 
             var poolDisposeStopwatch = Stopwatch.StartNew();
 
-            //Logger.LogInformation($"Disposing channel pool ({Channels.Count} channels).");
+            Logger.LogInformation($"Disposing channel pool ({Channels.Count} channels).");
 
             var remainingWaitDuration = TotalDisposeWaitDuration;
 
@@ -103,11 +104,11 @@ namespace Mango.RabbitMQ.Core
 
             poolDisposeStopwatch.Stop();
 
-            //Logger.LogInformation($"Disposed RabbitMQ Channel Pool ({Channels.Count} channels in {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms).");
+            Logger.LogInformation($"Disposed RabbitMQ Channel Pool ({Channels.Count} channels in {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms).");
 
             if (poolDisposeStopwatch.Elapsed.TotalSeconds > 5.0)
             {
-                //Logger.LogWarning($"Disposing RabbitMQ Channel Pool got time greather than expected: {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
+                Logger.LogWarning($"Disposing RabbitMQ Channel Pool got time greather than expected: {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
             }
 
             Channels.Clear();
