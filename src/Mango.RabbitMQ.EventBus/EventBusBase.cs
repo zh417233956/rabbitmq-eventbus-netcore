@@ -21,7 +21,7 @@ namespace Mango.RabbitMQ.EventBus
         {
             return Subscribe(typeof(TEvent), new ActionEventHandler<TEvent>(action));
         }
-
+        
         /// <inheritdoc/>
         public virtual IDisposable Subscribe<TEvent, THandler>()
             where TEvent : class
