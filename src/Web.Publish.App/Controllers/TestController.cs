@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mango.RabbitMQ.EventBus.RabbitMQ;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,34 +15,67 @@ namespace Web.Publish.App.Controllers
     public class TestController : ControllerBase
     {
         private readonly ILogger<TestController> _logger;
-        private RabbitMqEventBus _rabbitmqEvent;
+        private IRabbitMQEventBus _rabbitmqEvent;
 
-        public TestController(ILogger<TestController> logger, RabbitMqEventBus rabbitmqEvent)
+        public TestController(ILogger<TestController> logger, IRabbitMQEventBus rabbitmqEvent)
         {
             _logger = logger;
             _rabbitmqEvent = rabbitmqEvent;
         }
-
-        [HttpGet("Get")]
-        public string Get()
+        [HttpGet("Index")]
+        public string Index()
         {
-            //_logger.LogInformation("Hello World!");
+            _rabbitmqEvent.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
-            _rabbitmqEvent.PublishAsync("mis2020_message", "hello rabbitmq routing");
+            _rabbitmqEvent.Subscribe<MySimpleEventData>((a) =>
+            {
+                //throw new NotImplementedException();
+                return Task.FromResult<object>(null);
+            });
 
             return "Hello World!";
         }
-        [HttpGet("Bind")]
-        public async Task<string> BindAsync()
+
+        private Task SubFun(MySimpleEventData arg)
         {
-            await _rabbitmqEvent.BindAsync("mis2020_message");
-            return "Bind!";
+            return Task.FromResult<object>(null);
+            //throw new NotImplementedException();
         }
-        [HttpGet("UNBind")]
-        public async Task<string> UNBindAsync()
+
+        [HttpGet("Get")]
+        public async Task<string> GetAsync()
         {
-            await _rabbitmqEvent.UnbindAsync("mis2020_message");
-            return "UNBind!";
+            //_logger.LogInformation("Hello World!");
+
+            await _rabbitmqEvent.PublishAsync(new MySimpleEventData(1));
+
+            return "Hello RabbitMQ!";
+        }
+    }
+    public class MySimpleEventData
+    {
+        public int Value { get; set; }
+
+        public MySimpleEventData(int value)
+        {
+            Value = value;
+        }
+    }
+    public class MySimpleDistributedTransientEventHandler : Mango.RabbitMQ.EventBus.IMQEventHandler<MySimpleEventData>, IDisposable
+    {
+        public static int HandleCount { get; set; }
+
+        public static int DisposeCount { get; set; }
+
+        public Task HandleEventAsync(MySimpleEventData eventData)
+        {
+            ++HandleCount;
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            ++DisposeCount;
         }
     }
 }

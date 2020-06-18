@@ -1,4 +1,5 @@
 ﻿using Mango.RabbitMQ.Core;
+using Mango.RabbitMQ.EventBus.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +36,7 @@ namespace Web.Publish.App.Module
 
         }
         public Task InvokeAsync(HttpContext context, RequestDelegate next)
-        {            
+        {
             QueueDeclareConfiguration QueueConfiguration = new QueueDeclareConfiguration(ChannelQueueName);
             QueueConfiguration.Declare(ChannelAccessor.Channel);
 
@@ -47,8 +48,8 @@ namespace Web.Publish.App.Module
                 routingKey: QueueConfiguration.QueueName,
                 basicProperties: properties,
                 body: serializer.Serialize(string.Format(message, DateTime.Now))
-            );           
-            Console.WriteLine(" [Publish] Publish {0}", string.Format(message,DateTime.Now));
+            );
+            Console.WriteLine(" [Publish] Publish {0}", string.Format(message, DateTime.Now));
             return next.Invoke(context);
         }
 
@@ -65,7 +66,7 @@ namespace Web.Publish.App.Module
             //中间件注入
             services.AddSingleton<RabbitMQPublishMiddleware>();
             //事件
-            services.AddSingleton<RabbitMqEventBus>();
+            services.AddSingleton<IRabbitMQEventBus, RabbitMQEventBus>();
         }
         public static IApplicationBuilder UseRabbitMQPublishMiddleware(this IApplicationBuilder builder)
         {

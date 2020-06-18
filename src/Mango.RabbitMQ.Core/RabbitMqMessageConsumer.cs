@@ -154,17 +154,17 @@ namespace Mango.RabbitMQ.Core
                     arguments: Queue.Arguments
                 );
 
-                //var consumer = new EventingBasicConsumer(channel);
-                //consumer.Received += async (model, basicDeliverEventArgs) =>
-                //{
-                //    await HandleIncomingMessage(channel, basicDeliverEventArgs);
-                //};
+                var consumer = new EventingBasicConsumer(channel);
+                consumer.Received += async (model, basicDeliverEventArgs) =>
+                {
+                    await HandleIncomingMessage(channel, basicDeliverEventArgs);
+                };
 
-                //channel.BasicConsume(
-                //    queue: Queue.QueueName,
-                //    autoAck: false,
-                //    consumer: consumer
-                //);
+                channel.BasicConsume(
+                    queue: Queue.QueueName,
+                    autoAck: false,
+                    consumer: consumer
+                );
 
                 Channel = channel;
             }
@@ -188,6 +188,8 @@ namespace Mango.RabbitMQ.Core
             catch (Exception ex)
             {
                 Logger.LogWarning(ex.Message);
+                //channel.BasicReject(basicDeliverEventArgs.DeliveryTag,true);
+                channel.BasicNack(basicDeliverEventArgs.DeliveryTag, false, true);
             }
         }
 

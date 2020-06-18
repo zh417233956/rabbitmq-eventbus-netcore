@@ -27,7 +27,7 @@ namespace Web.Publish.App
             services.AddControllers();
 
             services.Configure<RabbitMqOptions>(Configuration.GetSection("RabbitMQ"));
-            services.Configure<RabbitMqEventBusOptions>(Configuration.GetSection("RabbitMQ:EventBus"));
+            services.Configure<Mango.RabbitMQ.EventBus.RabbitMQ.RabbitMqEventBusOptions>(Configuration.GetSection("RabbitMQ:EventBus"));
 
             services.AddRabbitMQPublishMiddleware();
         }
@@ -42,7 +42,7 @@ namespace Web.Publish.App
 
             app.UseRouting();
 
-            app.UseRabbitMQPublishMiddleware();
+            //app.UseRabbitMQPublishMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

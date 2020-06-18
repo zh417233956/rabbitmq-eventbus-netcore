@@ -19,7 +19,7 @@
     "Web.Publish.App": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/test",
+      "launchUrl": "api/test/index",
       "applicationUrl": "http://localhost:5001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

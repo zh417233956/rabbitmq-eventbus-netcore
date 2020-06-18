@@ -10,5 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mango.RabbitMQ.Core\Mango.RabbitMQ.Core.csproj" />
+    <ProjectReference Include="..\Mango.RabbitMQ.EventBus\Mango.RabbitMQ.EventBus.csproj" />
   </ItemGroup>
 </Project>
