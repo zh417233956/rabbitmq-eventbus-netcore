@@ -58,15 +58,9 @@ namespace Web.Publish.App.Module
     {
         public static void AddRabbitMQPublishMiddleware(this IServiceCollection services)
         {
-            services.AddSingleton<IChannelPool, ChannelPool>();
-            services.AddSingleton<IConnectionPool, ConnectionPool>();
-            services.AddSingleton<IRabbitMqMessageConsumerFactory, RabbitMqMessageConsumerFactory>();
-            services.AddTransient<RabbitMqMessageConsumer>();
-            services.AddTransient<IRabbitMqSerializer, Utf8JsonRabbitMqSerializer>();
+            services.AddRMQEventBus();
             //中间件注入
             services.AddSingleton<RabbitMQPublishMiddleware>();
-            //事件
-            services.AddSingleton<IRabbitMQEventBus, RabbitMQEventBus>();
         }
         public static IApplicationBuilder UseRabbitMQPublishMiddleware(this IApplicationBuilder builder)
         {

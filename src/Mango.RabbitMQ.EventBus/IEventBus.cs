@@ -72,13 +72,13 @@ namespace Mango.RabbitMQ.EventBus
         void Unsubscribe<TEvent>(Func<TEvent, Task> action)
             where TEvent : class;
 
-        ///// <summary>
-        ///// Unregisters from an event.
-        ///// </summary>
-        ///// <typeparam name="TEvent">Event type</typeparam>
-        ///// <param name="handler">Handler object that is registered before</param>
-        //void Unsubscribe<TEvent>(ILocalEventHandler<TEvent> handler)
-        //    where TEvent : class;
+        /// <summary>
+        /// Unregisters from an event.
+        /// </summary>
+        /// <typeparam name="TEvent">Event type</typeparam>
+        /// <param name="handler">Handler object that is registered before</param>
+        void Unsubscribe<TEvent>(IMQEventHandler<TEvent> handler)
+            where TEvent : class;
 
         /// <summary>
         /// Unregisters from an event.

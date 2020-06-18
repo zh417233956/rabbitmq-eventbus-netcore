@@ -66,11 +66,8 @@ namespace Web.Subscribe.App.Module
     {
         public static void AddRabbitMQSubscribeMiddleware(this IServiceCollection services)
         {
-            services.AddSingleton<IChannelPool, ChannelPool>();
-            services.AddSingleton<IConnectionPool, ConnectionPool>();
-            services.AddSingleton<IRabbitMqMessageConsumerFactory, RabbitMqMessageConsumerFactory>();
-            services.AddTransient<IRabbitMqMessageConsumer, RabbitMqMessageConsumer>();
-            services.AddTransient<IRabbitMqSerializer, Utf8JsonRabbitMqSerializer>();
+            //注入RabbitMQ
+            services.AddRabbitMQ();
             //中间件注入
             services.AddSingleton<RabbitMQSubscribeMiddleware>();
         }

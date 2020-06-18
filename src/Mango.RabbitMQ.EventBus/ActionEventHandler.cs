@@ -9,8 +9,7 @@ namespace Mango.RabbitMQ.EventBus
     /// This event handler is an adapter to be able to use an action as <see cref="IMQEventHandler{TEvent}"/> implementation.
     /// </summary>
     /// <typeparam name="TEvent">Event type</typeparam>
-    public class ActionEventHandler<TEvent> :
-        IMQEventHandler<TEvent>
+    public class ActionEventHandler<TEvent> :IMQEventHandler<TEvent>
     {
         /// <summary>
         /// Function to handle the event.

@@ -12,8 +12,6 @@ namespace Mango.RabbitMQ.EventBus
 {
     public abstract class EventBusBase : IEventBus
     {
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
-
         protected EventBusBase()
         {
         }
@@ -136,7 +134,6 @@ namespace Mango.RabbitMQ.EventBus
             {
                 try
                 {
-                    //TODO:待完善
                     var handlerType = eventHandlerWrapper.EventHandler.GetType();
 
                     if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IMQEventHandler<>)))

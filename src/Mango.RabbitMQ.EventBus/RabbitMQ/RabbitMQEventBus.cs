@@ -60,7 +60,12 @@ namespace Mango.RabbitMQ.EventBus.RabbitMQ
 
             Consumer.OnMessageReceived(ProcessEventAsync);
         }
-
+        /// <summary>
+        /// 回调事件
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <param name="ea"></param>
+        /// <returns></returns>
         private async Task ProcessEventAsync(IModel channel, BasicDeliverEventArgs ea)
         {
             var eventName = ea.RoutingKey;
@@ -74,7 +79,12 @@ namespace Mango.RabbitMQ.EventBus.RabbitMQ
 
             await TriggerHandlersAsync(eventType, eventData);
         }
-
+        /// <summary>
+        /// 订阅
+        /// </summary>
+        /// <typeparam name="TEvent"></typeparam>
+        /// <param name="handler"></param>
+        /// <returns></returns>
         public IDisposable Subscribe<TEvent>(IMQEventHandler<TEvent> handler) where TEvent : class
         {
             return Subscribe(typeof(TEvent), handler);
@@ -153,6 +163,7 @@ namespace Mango.RabbitMQ.EventBus.RabbitMQ
 
         public override Task PublishAsync(Type eventType, object eventData)
         {
+            
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 

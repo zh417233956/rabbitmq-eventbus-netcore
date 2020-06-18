@@ -25,7 +25,8 @@ namespace Web.Publish.App.Controllers
         [HttpGet("Index")]
         public string Index()
         {
-            _rabbitmqEvent.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+            //_rabbitmqEvent.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+            _rabbitmqEvent.Subscribe<MySimpleEventData>(new MySimpleDistributedTransientEventHandler());
 
             _rabbitmqEvent.Subscribe<MySimpleEventData>((a) =>
             {
